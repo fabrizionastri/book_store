@@ -7,8 +7,8 @@ class Book(models.Model):  # extends the Model class
     rating = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)], default=0
     )
-    author = models.CharField(max_length=100)
-    is_bestselling = models.BooleanField()
+    author = models.CharField(max_length=100, null=True)
+    is_bestselling = models.BooleanField(default=False)
 
     def __str__(self):  # returns a string representation of the object
         return f"{self.title} ({self.rating})"
