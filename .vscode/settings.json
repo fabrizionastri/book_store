@@ -1,5 +1,6 @@
 {
   "window.zoomLevel": 0,
+  "editor.tabSize": 4,
   "python.languageServer": "Pylance",
   "files.associations": {
     "**/*.html": "html",
