@@ -3,7 +3,12 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Book(models.Model):  # extends the Model class
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=50, unique=True)
     rating = models.IntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(5)]
+        validators=[MinValueValidator(1), MaxValueValidator(5)], default=0
     )
+    author = models.CharField(max_length=100)
+    is_bestselling = models.BooleanField()
+
+    def __str__(self):  # returns a string representation of the object
+        return f"{self.title} ({self.rating})"
