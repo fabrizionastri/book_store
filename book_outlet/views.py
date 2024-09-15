@@ -7,14 +7,15 @@ def index(request):
     return render(request, "book_outlet/index.html", {"books": Book.objects.all()})
 
 
-def book_detail(request, book_id):
+def book_detail(request, book_slug):
     # Solution 1 - return standard 404 page
     # try:
     #     book = Book.objects.get(id=book_id)
     # except:
     #     raise Http404()
     # Solution 2 - return custom 404 page using built-in shortcut
-    book = get_object_or_404(Book, pk=book_id)  # pk is the primary key, same as id
+    # book = get_object_or_404(Book, pk=book_id)  # pk is the primary key, same as id
+    book = get_object_or_404(Book, slug=book_slug)  # pk is the primary key, same as id
     return render(request, "book_outlet/book_detail.html", {"book": book})
 
 
