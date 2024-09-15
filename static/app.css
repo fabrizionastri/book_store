@@ -20,6 +20,38 @@ h3 {
   font-weight: bold;
 }
 
+table {
+  border-collapse: separate;
+  width: 100%;
+  max-width: 800px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+  border-spacing: 0; /* Ensures no extra space between table cells */
+}
+th {
+  background-color: #eee;
+  text-align: left;
+  padding: 5px;
+  font-weight: bold;
+  border: none; /* No internal borders */
+}
+td {
+  padding: 5px;
+  text-align: left;
+  border-top: 1px solid #eee;
+}
+
+th,
+td {
+  padding: 5px;
+}
+
+/* when I hover on a row, its background color becomes very light blue */
+tr:hover {
+  background-color: #f0f8ff;
+}
+
 #main-navigation {
   width: 100%;
   height: 5rem;
