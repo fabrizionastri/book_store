@@ -10,6 +10,9 @@ class Country(models.Model):
     name = models.CharField(max_length=50, unique=True)
     code = models.CharField(max_length=2, unique=True)
 
+    def nr_books(self):
+        return self.books.all().count()
+
     def __str__(self):
         return f"{self.name} ({self.code})"
 

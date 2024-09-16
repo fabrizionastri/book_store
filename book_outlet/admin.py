@@ -5,7 +5,8 @@ from .models import Book, Author, Address, Country
 
 
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ("name", "code")
+
+    list_display = ("name", "code", "nr_books")
 
 
 class AddressAdmin(admin.ModelAdmin):
