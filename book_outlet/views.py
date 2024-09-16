@@ -1,10 +1,23 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import Http404
 from .models import Book
+from django.db.models import Avg, Min, Max
 
 
 def index(request):
-    return render(request, "book_outlet/index.html", {"books": Book.objects.all()})
+    books = Book.objects.all().order_by("title")
+
+    return render(
+        request,
+        "book_outlet/index.html",
+        {
+            "books": books,
+            "number_of_books": books.count(),
+            "stats": books.aggregate(
+                avg=Avg("rating"), min=Min("rating"), max=Max("rating")
+            ),
+        },
+    )
 
 
 def book_detail(request, book_slug):

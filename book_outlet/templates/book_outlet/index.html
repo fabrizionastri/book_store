@@ -14,5 +14,8 @@
             </li>
         {% endfor %}
     </ul>
+    <hr>
+    <p>Total number of books: {{ number_of_books }}</p>
+    <p>Average rating: {{ stats.avg }}</p>
     <a href="{% url 'generic_table' %}">See table</a>
 {% endblock content %}
