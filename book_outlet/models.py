@@ -26,6 +26,9 @@ class Address(models.Model):
         self.slug = slugify(self)
         super().save(*args, **kwargs)
 
+    class Meta:
+        verbose_name_plural = "Addresses"
+
 
 class Author(models.Model):
     first_name = models.CharField(max_length=50, unique=True)
