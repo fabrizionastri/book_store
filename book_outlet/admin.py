@@ -1,7 +1,11 @@
 # book_outlet/admin.py
 
 from django.contrib import admin
-from .models import Book, Author, Address
+from .models import Book, Author, Address, Country
+
+
+class CountryAdmin(admin.ModelAdmin):
+    list_display = ("name", "code")
 
 
 class AddressAdmin(admin.ModelAdmin):
@@ -21,7 +25,7 @@ class AddressAdmin(admin.ModelAdmin):
 class BookAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
     list_display = ("title", "author", "rating", "is_bestselling", "slug")
-    list_filter = ("author", "rating")
+    list_filter = ("author", "rating", "published_countries")
 
 
 class AuthorAdmin(admin.ModelAdmin):
@@ -33,3 +37,4 @@ class AuthorAdmin(admin.ModelAdmin):
 admin.site.register(Book, BookAdmin)
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(Address, AddressAdmin)
+admin.site.register(Country, CountryAdmin)

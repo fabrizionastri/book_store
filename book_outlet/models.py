@@ -6,6 +6,20 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.text import slugify
 
 
+class Country(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    code = models.CharField(max_length=2, unique=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.code})"
+
+    def get_absolute_url(self):
+        return reverse("country_detail", args=[self.code])
+
+    class Meta:
+        verbose_name_plural = "Countries"
+
+
 class Address(models.Model):
     street = models.CharField(max_length=50, null=True)
     city = models.CharField(max_length=50, null=True)
@@ -39,6 +53,7 @@ class Author(models.Model):
         null=True,
         blank=True,
     )
+
     slug = models.SlugField(default="", blank=True, null=False, db_index=True)
 
     def full_name(self):
@@ -70,6 +85,9 @@ class Book(models.Model):  # extends the Model class
         Author, on_delete=models.CASCADE, null=True, related_name="books"
     )
     is_bestselling = models.BooleanField(default=False)
+    published_countries = models.ManyToManyField(
+        Country, related_name="books", blank=True
+    )
     slug = models.SlugField(default="", blank=True, null=False, db_index=True)
 
     def get_absolute_url(self):
