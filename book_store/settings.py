@@ -140,4 +140,6 @@ LOGGING = {
     },
 }
 # If you have static files in the root directory
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]

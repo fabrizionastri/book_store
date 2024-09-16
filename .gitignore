@@ -1,3 +1,6 @@
+.git
+.vscode
+db.sqlite3
 # Python
 *.py[cod]
 __pycache__/
@@ -5,7 +8,7 @@ __pycache__/
 
 # Documentation
 _docs
-
+_temp
 # Django
 *.log
 db.sqlite3

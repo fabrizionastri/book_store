@@ -19,7 +19,7 @@ def book_detail(request, book_slug):
     return render(request, "book_outlet/book_detail.html", {"book": book})
 
 
-def generic_table_view(request):
+def generic_table(request):
     columns = [
         {"name": "title", "title": "Title"},
         {"name": "author", "title": "Author"},
