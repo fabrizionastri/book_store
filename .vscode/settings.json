@@ -1,20 +1,3 @@
 {
-  "window.zoomLevel": 0,
-  "editor.tabSize": 4,
-  "python.languageServer": "Pylance",
-  "files.associations": {
-    "**/*.html": "html",
-    "**/templates/**/*.html": "django-html",
-    "**/templates/**/*": "django-html",
-    "**/requirements{/**,*}.{txt,in}": "pip-requirements"
-  },
-  "emmet.includeLanguages": {
-    "django-html": "html"
-  },
-  "[django-html]": {
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "monosans.djlint"
-  },
-  "djlint.formatLanguages": ["django-html"],
-  "djlint.useVenv": true
+  "window.zoomLevel": 0
 }

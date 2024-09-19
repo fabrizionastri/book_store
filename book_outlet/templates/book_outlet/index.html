@@ -7,15 +7,15 @@
     <ul>
         {% for book in books %}
             <li>
-                {% comment %} <a href="{% url 'book_detail' book.id %}">{{ book.title }}</a> {% endcomment %}
                 <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
                 : by {{ book.author }} ({{ book.rating }})
                 {% if book.is_bestselling %}<strong>→ Bestseller!</strong>{% endif %}
-            </li>
-        {% endfor %}
-    </ul>
-    <hr>
-    <p>Total number of books: {{ number_of_books }}</p>
-    <p>Average rating: {{ stats.avg }}</p>
-    <a href="{% url 'generic_table' %}">See table</a>
-{% endblock content %}
+                <span>. . .</span>
+                <a href="{% url 'generic_form' book.slug %}">Edit</a>
+            {% endfor %}
+        </ul>
+        <hr>
+        <p>Total number of books: {{ number_of_books }}</p>
+        <p>Average rating: {{ stats.avg }}</p>
+        <a href="{% url 'generic_table' %}">See table</a>
+    {% endblock content %}

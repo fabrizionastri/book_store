@@ -37,11 +37,11 @@ class Address(models.Model):
     def get_absolute_url(self):
         return reverse("address_detail", args=[self.slug])
 
-    def save(
-        self, *args, **kwargs
-    ):  # not needed if using prepopulated_fields in the admin
-        self.slug = slugify(self)
-        super().save(*args, **kwargs)
+    # def save(
+    #     self, *args, **kwargs
+    # ):  # not needed if using prepopulated_fields in the admin
+    #     self.slug = slugify(self)
+    #     super().save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = "Addresses"
@@ -69,11 +69,11 @@ class Author(models.Model):
     def get_absolute_url(self):
         return reverse("author_detail", args=[self.slug])
 
-    def save(
-        self, *args, **kwargs
-    ):  # not needed if using prepopulated_fields in the admin
-        self.slug = slugify(self)
-        super().save(*args, **kwargs)
+    # def save(
+    #     self, *args, **kwargs
+    # ):  # not needed if using prepopulated_fields in the admin
+    #     self.slug = slugify(self)
+    #     super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -96,11 +96,11 @@ class Book(models.Model):  # extends the Model class
     def get_absolute_url(self):
         return reverse("book_detail", args=[self.slug])
 
-    def save(
-        self, *args, **kwargs
-    ):  # not needed if using prepopulated_fields in the admin
-        self.slug = slugify(self.title)
-        super().save(*args, **kwargs)
+    # def save(
+    #     self, *args, **kwargs
+    # ):  # not needed if using prepopulated_fields in the admin
+    #     self.slug = slugify(self.title)
+    #     super().save(*args, **kwargs)
 
     def __str__(self):  # returns a string representation of the object
         return f"{self.title} ({self.rating})"

@@ -1,7 +1,7 @@
 {% extends "book_outlet/base.html" %}
 {% load custom_filters %}
 {% block title %}
-    Index | Book Outlet
+    {{ title }}
 {% endblock title %}
 {% block content %}
     <table id="sortable-table">
@@ -13,6 +13,7 @@
         <tbody>
             {% for row in data %}
                 <tr>
+                    {% comment %} Note: get_idem is a custom filter defined in custom_filters.py {% endcomment %}
                     {% for col in columns %}<td>{{ row|get_item:col.name }}</td>{% endfor %}
                 </tr>
             {% endfor %}

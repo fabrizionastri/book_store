@@ -40,6 +40,44 @@ def generic_table(request):
         {"name": "is_bestselling", "title": "Is best selling ?"},
     ]
     data = Book.objects.all()
-    context = {"columns": columns, "data": data}
+    context = {"title": "Books", "columns": columns, "data": data}
 
     return render(request, "book_outlet/generic_table.html", context)
+
+
+from django.shortcuts import render, redirect
+from .models import Book
+
+
+def generic_form(request, book_slug=None):
+
+    fields = [
+        {"name": "title", "label": "Title"},
+        {"name": "author", "label": "Author"},
+        {"name": "rating", "label": "Rating"},
+        {"name": "is_bestselling", "label": "Is Bestselling"},
+    ]
+
+    if request.method == "POST":
+        # You can process the submitted form data here
+        # Example: handling the submitted form data to save it
+        title = request.POST.get("title")
+        author = request.POST.get("author")
+        rating = request.POST.get("rating")
+        is_bestselling = request.POST.get("is_bestselling") == "on"
+
+        # Saving the data to the Book model
+        book = Book.objects.create(
+            title=title,
+            author=author,
+            rating=rating,
+            is_bestselling=is_bestselling,
+        )
+        return redirect("all_books")  # Redirect to book listing after saving
+
+    # If GET request, show the form with blank or pre-populated data
+    book = get_object_or_404(Book, slug=book_slug)  # pk is the primary key, same as id
+
+    context = {"title": "Add New Book", "fields": fields, "data": book, "mode": "view"}
+
+    return render(request, "book_outlet/generic_form.html", context)
