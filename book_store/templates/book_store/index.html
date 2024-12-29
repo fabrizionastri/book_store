@@ -3,15 +3,14 @@
     All Books
 {% endblock title %}
 {% block content %}
-    <h1>All Books</h1>
+    <h1>Welcome to the book store !</h1>
     <ul>
         {% for book in books %}
             <li>
                 <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
                 : by {{ book.author }} ({{ book.rating }})
                 {% if book.is_bestselling %}<strong>→ Bestseller!</strong>{% endif %}
-                <span>. . .</span>
-                <a href="{% url 'book_detail' book.slug %}">Edit</a>
+                {% comment %} add non breaking spaces {% endcomment %}
             {% endfor %}
     </ul>
     

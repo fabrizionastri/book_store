@@ -19,7 +19,7 @@ def index(request):
         },
     )
 
-
+# Using generic_table.html
 def books(request):
     columns = [
         {"name": "title", "title": "Title"},
@@ -32,19 +32,6 @@ def books(request):
     context = {"title": "Books", "columns": columns, "data": data}
 
     return render(request, "book_store/generic_table.html", context)
-
-
-def book_detail(request, slug):
-    # Solution 1 - return standard 404 page
-    # try:
-    #     book = Book.objects.get(id=book_id)
-    # except:
-    #     raise Http404()
-    # Solution 2 - return custom 404 page using built-in shortcut
-    # book = get_object_or_404(Book, pk=book_id)  # pk is the primary key, same as id
-    book = get_object_or_404(Book, slug=slug)  # pk is the primary key, same as id
-    return render(request, "book_store/book_detail.html", {"book": book})
-
 
 
 def countries(request):
@@ -64,12 +51,37 @@ def authors(request):
         {"name": "full_name", "title": "Name"},
         {"name": "nr_books", "title": "Number of Books"},
         {"name": "titles", "title": "Titles"},
+        {"name": "country", "title": "Country"},
         {"name": "slug", "title": "Slug"},
     ]
     data = Author.objects.all().order_by("first_name")
     context = {"title": "Authors", "columns": columns, "data": data}
 
     return render(request, "book_store/generic_table.html", context)
+
+
+# Using generic_form.html
+def country_form(request, code=None):
+    if request.method == "POST":
+        country, created  = Country.objects.update_or_create(
+            code=request.POST.get("code"),
+            defaults={"name":request.POST.get("name")},
+        )
+
+        print("Country created:", country)
+        return redirect("countries")
+    
+    # If GET request, render the form with the data
+    fields = [
+        {"name": "name", "label": "Name"},
+        {"name": "slug", "label": "Code"},
+    ]
+    data = get_object_or_404(Country, code=code)  
+
+    context = {"title": "Country", "fields": fields, "data": data, "mode": "view"}
+
+    return render(request, "book_store/generic_form.html", context)
+
 
 def book_form(request, slug=None):
     if request.method == "POST":
@@ -91,19 +103,20 @@ def book_form(request, slug=None):
         {"name": "is_bestselling", "label": "Is Bestselling"},
         {"name": "slug", "label": "Slug"},
     ]
-    data = get_object_or_404(Book, slug=slug)  # pk is the primary key, same as id
+    data = get_object_or_404(Book, slug=slug)
 
-    context = {"title": "Add new book", "fields": fields, "data": data, "mode": "view"}
+    context = {"title": "Book", "fields": fields, "data": data, "mode": "view"}
 
     return render(request, "book_store/generic_form.html", context)
 
 
 def author_form(request, slug=None):
     if request.method == "POST":
+        country_code = request.POST.get("country")
         author = Author.objects.create(
             first_name=request.POST.get("first_name"),
             last_name=request.POST.get("last_name"), 
-            country=request.POST.get("country"), 
+            country=get_object_or_404(Country, code=country_code) if country_code else None,
             slug=request.POST.get("slug")
         )
         print("Author created:", author)
@@ -113,15 +126,11 @@ def author_form(request, slug=None):
     fields = [
         {"name": "first_name", "label": "First Name"},
         {"name": "last_name", "label": "Last Name"},
-        {"name": "country", "label": "Country"},
+        {"name": "country", "label": "Country", "is_relation": True, "choices": Country.objects.all()},
         {"name": "slug", "label": "Slug"},
     ]
     data = get_object_or_404(Author, slug=slug)  
 
-    context = {"title": "Add new author", "fields": fields, "data": data, "mode": "view"}
+    context = {"title": "Author", "fields": fields, "data": data, "mode": "view"}
 
     return render(request, "book_store/generic_form.html", context)
-
-def author_detail(request, slug=None):
-    author = get_object_or_404(Author, slug=slug)  # pk is the primary key, same as id
-    return render(request, "book_store/generic_form.html", {"author": author})

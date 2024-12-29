@@ -23,7 +23,6 @@ h3 {
 table {
   border-collapse: separate;
   width: 100%;
-  max-width: 800px;
   border: 1px solid #eee;
   border-radius: 8px;
   overflow: hidden;
@@ -34,14 +33,12 @@ table {
 th {
   background-color: #eee;
   text-align: left;
-  padding: 5px;
   font-weight: bold;
   border: none;
   /* No internal borders */
 }
 
 td {
-  padding: 5px;
   text-align: left;
   border-top: 1px solid #eee;
 }
@@ -49,6 +46,7 @@ td {
 th,
 td {
   padding: 5px;
+  min-width: 150px;
 }
 
 /* when I hover on a row, its background color becomes very light blue */
@@ -92,7 +90,6 @@ form {
   color: rgb(16, 94, 27);
   display: flex;
   flex-direction: column;
-  max-width: 600px;
   margin: 20px 0;
   border: 1px solid #ddd;
   padding: 20px;
@@ -110,7 +107,8 @@ form>div>label {
   width: 150px;
 }
 
-form>div>input {
+form>div>input,
+select {
   width: 250px;
   border: 1px solid #ddd;
   padding: 10px;
@@ -119,7 +117,6 @@ form>div>input {
 
 form>button {
   margin-top: 20px;
-
   padding: 10px;
   width: 100px;
   background-color: #3f7e4d;
@@ -127,4 +124,33 @@ form>button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+button {
+  margin-top: 5px;
+  padding: 5px;
+  width: 60px;
+  background-color: #4592c5;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form-section {
+  max-width: 600px;
+  /* horizontally centered */
+  margin: 0 auto;
+}
+
+
+li>a {
+  text-decoration: none;
+  color: rgb(0, 0, 255);
+  /* line spacing */
+  line-height: 2;
+}
+
+li>a:hover {
+  color: #cf79f1;
 }

@@ -14,7 +14,7 @@ class Country(models.Model):
     code = models.CharField(max_length=2, unique=True)
 
     def get_absolute_url(self):
-        return reverse("country_detail", args=[self.code])
+        return reverse("book_form", args=[self.code])
 
     @property
     def nr_books(self):
@@ -23,7 +23,9 @@ class Country(models.Model):
     def __str__(self):
         return f"{self.name} ({self.code})"
     
-
+    @property
+    def slug(self):
+        return self.code
 
 class Author(models.Model):
     class Meta:
@@ -49,7 +51,7 @@ class Author(models.Model):
         return ", ".join([book.title for book in self.books.all()])
 
     def get_absolute_url(self):
-        return reverse("author_detail", args=[self.slug])
+        return reverse("book_form", args=[self.slug])
 
     # def save(self, *args, **kwargs):  # not needed if using prepopulated_fields in the admin panel
     #     self.slug = slugify(self)
@@ -68,7 +70,7 @@ class Book(models.Model):  # extends the Model class
     slug = models.SlugField(default="", blank=True, null=False, db_index=True)
 
     def get_absolute_url(self):
-        return reverse("book_detail", args=[self.slug])
+        return reverse("book_form", args=[self.slug])
 
     # def save(
     #     self, *args, **kwargs

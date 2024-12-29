@@ -4,21 +4,80 @@
     {{ title }}
 {% endblock title %}
 {% block content %}
+<div class="form-section">
     <h1>{{ title }}</h1>
-    <p>Mode: {{ mode }}</p>
-    <form method="POST" action="">
+    <div style="text-align: right;">
+        <button id="edit-toggle" style="margin-right:20px;" type="button">Edit</button>
+        <span id="form-mode">Mode: {{ mode }}</span>
+    </div>
+    <form method="POST" action="" id="editable-form" data-mode="{{ mode }}">
         {% csrf_token %}
         {% for field in fields %}
             <div>
                 <label for="{{ field.name }}">{{ field.label }}</label>
-                <input type="text"
-                       id="{{ field.name }}"
-                       name="{{ field.name }}"
-                       value="{{ data|get_item:field.name }}">
+                {% if field.is_relation %}
+                    <select id="{{ field.name }}" name="{{ field.name }}" >
+                        {% for choice in field.choices %}
+                            <option value="{{ choice.1 }}" >
+                                {{ choice }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                {% else %}
+                    <input type="text"
+                           id="{{ field.name }}"
+                           name="{{ field.name }}"
+                           value="{{ data|get_item:field.name }}"
+                           {% if mode == 'view' %}readonly style="border: none; background: transparent;"{% endif %}>
+                {% endif %}
             </div>
         {% endfor %}
-        <button type="submit">Submit</button>
+        <button type="submit" id="submit-button" {% if mode == 'view' %}style="display: none;"{% endif %}>
+            Submit
+        </button>
     </form>
     <br>
     <a href="{% url 'index' %}">Back to all books</a>
+</div>
 {% endblock content %}
+
+{% block scripts %}
+<script>
+    // JavaScript for toggling modes
+    document.getElementById('edit-toggle').addEventListener('click', function () {
+        console.log('clicked');
+        const form = document.getElementById('editable-form');
+        const submitButton = document.getElementById('submit-button');
+        const fields = form.querySelectorAll('input[type="text"]');
+        const modeIndicator = document.getElementById('form-mode');
+
+        // Toggle mode between 'edit' and 'view'
+        const currentMode = form.dataset.mode;
+        const newMode = currentMode === 'view' ? 'edit' : 'view';
+
+        // Update the form fields and button visibility
+        fields.forEach(field => {
+            if (newMode === 'view') {
+                field.setAttribute('readonly', 'readonly');
+                field.style.border = 'none';
+                field.style.background = 'transparent';
+            } else {
+                field.removeAttribute('readonly');
+                field.style.border = '';
+                field.style.background = '';
+            }
+        });
+
+        // Toggle submit button visibility
+        submitButton.style.display = newMode === 'view' ? 'none' : '';
+
+        // Update mode in the form dataset and mode indicator
+        form.dataset.mode = newMode;
+        modeIndicator.textContent = `Mode: ${newMode}`;
+
+        // Optionally, save the mode in cookies or sessionStorage
+        document.cookie = `form_mode=${newMode}; path=/`;
+        sessionStorage.setItem('form_mode', newMode);
+    });
+</script>
+{% endblock scripts %}

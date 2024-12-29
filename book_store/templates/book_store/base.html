@@ -23,7 +23,10 @@
             <a href="{% url 'countries' %}">Countries</a>
             <a href="{% url 'authors' %}">Authors</a>
         </nav>
-        {% block content %}
-        {% endblock content %}
+        <section>
+            {% block content %}
+            {% endblock content %}
+        </section>
+        {% block scripts %}{% endblock scripts %}
     </body>
 </html>
