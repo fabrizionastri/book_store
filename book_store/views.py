@@ -9,7 +9,7 @@ def index(request):
 
     return render(
         request,
-        "book_outlet/index.html",
+        "book_store/index.html",
         {
             "books": books,
             "number_of_books": books.count(),
@@ -26,11 +26,12 @@ def books(request):
         {"name": "author", "title": "Author"},
         {"name": "rating", "title": "Rating"},
         {"name": "is_bestselling", "title": "Is best selling ?"},
+        {"name": "slug", "title": "Slug"},
     ]
     data = Book.objects.all()
     context = {"title": "Books", "columns": columns, "data": data}
 
-    return render(request, "book_outlet/generic_table.html", context)
+    return render(request, "book_store/generic_table.html", context)
 
 
 def book_detail(request, slug):
@@ -42,7 +43,7 @@ def book_detail(request, slug):
     # Solution 2 - return custom 404 page using built-in shortcut
     # book = get_object_or_404(Book, pk=book_id)  # pk is the primary key, same as id
     book = get_object_or_404(Book, slug=slug)  # pk is the primary key, same as id
-    return render(request, "book_outlet/book_detail.html", {"book": book})
+    return render(request, "book_store/book_detail.html", {"book": book})
 
 
 
@@ -55,20 +56,20 @@ def countries(request):
     data = Country.objects.all().order_by("name")
     context = {"title": "Books", "columns": columns, "data": data}
 
-    return render(request, "book_outlet/generic_table.html", context)
+    return render(request, "book_store/generic_table.html", context)
 
 
 def authors(request):
     columns = [
         {"name": "full_name", "title": "Name"},
-        {"name": "books_written", "title": "Number of Books"},
-        {"name": "book_list", "title": "Titles"},
+        {"name": "nr_books", "title": "Number of Books"},
+        {"name": "titles", "title": "Titles"},
         {"name": "slug", "title": "Slug"},
     ]
     data = Author.objects.all().order_by("first_name")
     context = {"title": "Authors", "columns": columns, "data": data}
 
-    return render(request, "book_outlet/generic_table.html", context)
+    return render(request, "book_store/generic_table.html", context)
 
 def book_form(request, slug=None):
     if request.method == "POST":
@@ -94,7 +95,7 @@ def book_form(request, slug=None):
 
     context = {"title": "Add new book", "fields": fields, "data": data, "mode": "view"}
 
-    return render(request, "book_outlet/generic_form.html", context)
+    return render(request, "book_store/generic_form.html", context)
 
 
 def author_form(request, slug=None):
@@ -102,7 +103,7 @@ def author_form(request, slug=None):
         author = Author.objects.create(
             first_name=request.POST.get("first_name"),
             last_name=request.POST.get("last_name"), 
-            address=request.POST.get("address"), 
+            country=request.POST.get("country"), 
             slug=request.POST.get("slug")
         )
         print("Author created:", author)
@@ -112,15 +113,15 @@ def author_form(request, slug=None):
     fields = [
         {"name": "first_name", "label": "First Name"},
         {"name": "last_name", "label": "Last Name"},
-        {"name": "address", "label": "Address"},
+        {"name": "country", "label": "Country"},
         {"name": "slug", "label": "Slug"},
     ]
     data = get_object_or_404(Author, slug=slug)  
 
     context = {"title": "Add new author", "fields": fields, "data": data, "mode": "view"}
 
-    return render(request, "book_outlet/generic_form.html", context)
+    return render(request, "book_store/generic_form.html", context)
 
 def author_detail(request, slug=None):
     author = get_object_or_404(Author, slug=slug)  # pk is the primary key, same as id
-    return render(request, "book_outlet/generic_form.html", {"author": author})
+    return render(request, "book_store/generic_form.html", {"author": author})

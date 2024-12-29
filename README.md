@@ -15,3 +15,8 @@ The main purpose of this project is to demonstrate how to create an app with mul
 - `git clone https://github.com/fabrizionastri/book_store` clone the repository to your local machine
 - `uv sync` to install the required dependencies and create the virtual environment
 - `python manage.py runserver` to start the server
+
+## Admin panel
+
+- `python manage.py createsuperuser` to create a superuser
+- `http://http://127.0.0.1:8000/admin` to access the admin panel
