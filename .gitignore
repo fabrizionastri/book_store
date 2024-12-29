@@ -5,7 +5,8 @@ db.sqlite3
 *.py[cod]
 __pycache__/
 *.so
-
+.venv
+migrations
 # Documentation
 _docs
 _temp

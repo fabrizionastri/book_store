@@ -11,11 +11,12 @@
                 : by {{ book.author }} ({{ book.rating }})
                 {% if book.is_bestselling %}<strong>→ Bestseller!</strong>{% endif %}
                 <span>. . .</span>
-                <a href="{% url 'generic_form' book.slug %}">Edit</a>
+                <a href="{% url 'book_detail' book.slug %}">Edit</a>
             {% endfor %}
-        </ul>
-        <hr>
-        <p>Total number of books: {{ number_of_books }}</p>
-        <p>Average rating: {{ stats.avg }}</p>
-        <a href="{% url 'generic_table' %}">See table</a>
+    </ul>
+    
+    <hr>
+    <p>Total number of books: {{ number_of_books }}</p>
+    <p>Average rating: {{ stats.avg }}</p>
+    <a href="{% url 'books' %}">See table</a>
     {% endblock content %}

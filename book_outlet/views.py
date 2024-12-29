@@ -1,7 +1,7 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import Http404
-from .models import Book
+from .models import Author, Book, Country
 from django.db.models import Avg, Min, Max
+from django.http import Http404
+from django.shortcuts import render, get_object_or_404, redirect
 
 
 def index(request):
@@ -20,19 +20,7 @@ def index(request):
     )
 
 
-def book_detail(request, book_slug):
-    # Solution 1 - return standard 404 page
-    # try:
-    #     book = Book.objects.get(id=book_id)
-    # except:
-    #     raise Http404()
-    # Solution 2 - return custom 404 page using built-in shortcut
-    # book = get_object_or_404(Book, pk=book_id)  # pk is the primary key, same as id
-    book = get_object_or_404(Book, slug=book_slug)  # pk is the primary key, same as id
-    return render(request, "book_outlet/book_detail.html", {"book": book})
-
-
-def generic_table(request):
+def books(request):
     columns = [
         {"name": "title", "title": "Title"},
         {"name": "author", "title": "Author"},
@@ -45,39 +33,94 @@ def generic_table(request):
     return render(request, "book_outlet/generic_table.html", context)
 
 
-from django.shortcuts import render, redirect
-from .models import Book
+def book_detail(request, slug):
+    # Solution 1 - return standard 404 page
+    # try:
+    #     book = Book.objects.get(id=book_id)
+    # except:
+    #     raise Http404()
+    # Solution 2 - return custom 404 page using built-in shortcut
+    # book = get_object_or_404(Book, pk=book_id)  # pk is the primary key, same as id
+    book = get_object_or_404(Book, slug=slug)  # pk is the primary key, same as id
+    return render(request, "book_outlet/book_detail.html", {"book": book})
 
 
-def generic_form(request, book_slug=None):
 
+def countries(request):
+    columns = [
+        {"name": "name", "title": "Name"},
+        {"name": "code", "title": "Code"},
+        {"name": "nr_books", "title": "Number of Books"},
+    ]
+    data = Country.objects.all().order_by("name")
+    context = {"title": "Books", "columns": columns, "data": data}
+
+    return render(request, "book_outlet/generic_table.html", context)
+
+
+def authors(request):
+    columns = [
+        {"name": "full_name", "title": "Name"},
+        {"name": "books_written", "title": "Number of Books"},
+        {"name": "book_list", "title": "Titles"},
+        {"name": "slug", "title": "Slug"},
+    ]
+    data = Author.objects.all().order_by("first_name")
+    context = {"title": "Authors", "columns": columns, "data": data}
+
+    return render(request, "book_outlet/generic_table.html", context)
+
+def book_form(request, slug=None):
+    if request.method == "POST":
+        book = Book.objects.create(
+            title=request.POST.get("title"),
+            author=request.POST.get("author"),
+            rating=request.POST.get("rating"),
+            is_bestselling=request.POST.get("is_bestselling") == "on",
+            slug=request.POST.get("slug"),
+        )
+        print("Book created:", book)
+        return redirect("index")  # Redirect to book listing after saving
+
+    # If GET request, render the form with the data
     fields = [
         {"name": "title", "label": "Title"},
         {"name": "author", "label": "Author"},
         {"name": "rating", "label": "Rating"},
         {"name": "is_bestselling", "label": "Is Bestselling"},
+        {"name": "slug", "label": "Slug"},
     ]
+    data = get_object_or_404(Book, slug=slug)  # pk is the primary key, same as id
 
-    if request.method == "POST":
-        # You can process the submitted form data here
-        # Example: handling the submitted form data to save it
-        title = request.POST.get("title")
-        author = request.POST.get("author")
-        rating = request.POST.get("rating")
-        is_bestselling = request.POST.get("is_bestselling") == "on"
-
-        # Saving the data to the Book model
-        book = Book.objects.create(
-            title=title,
-            author=author,
-            rating=rating,
-            is_bestselling=is_bestselling,
-        )
-        return redirect("all_books")  # Redirect to book listing after saving
-
-    # If GET request, show the form with blank or pre-populated data
-    book = get_object_or_404(Book, slug=book_slug)  # pk is the primary key, same as id
-
-    context = {"title": "Add New Book", "fields": fields, "data": book, "mode": "view"}
+    context = {"title": "Add new book", "fields": fields, "data": data, "mode": "view"}
 
     return render(request, "book_outlet/generic_form.html", context)
+
+
+def author_form(request, slug=None):
+    if request.method == "POST":
+        author = Author.objects.create(
+            first_name=request.POST.get("first_name"),
+            last_name=request.POST.get("last_name"), 
+            address=request.POST.get("address"), 
+            slug=request.POST.get("slug")
+        )
+        print("Author created:", author)
+        return redirect("authors")
+    
+    # If GET request, render the form with the data
+    fields = [
+        {"name": "first_name", "label": "First Name"},
+        {"name": "last_name", "label": "Last Name"},
+        {"name": "address", "label": "Address"},
+        {"name": "slug", "label": "Slug"},
+    ]
+    data = get_object_or_404(Author, slug=slug)  
+
+    context = {"title": "Add new author", "fields": fields, "data": data, "mode": "view"}
+
+    return render(request, "book_outlet/generic_form.html", context)
+
+def author_detail(request, slug=None):
+    author = get_object_or_404(Author, slug=slug)  # pk is the primary key, same as id
+    return render(request, "book_outlet/generic_form.html", {"author": author})

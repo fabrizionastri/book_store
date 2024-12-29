@@ -19,6 +19,10 @@ class Country(models.Model):
     def get_absolute_url(self):
         return reverse("country_detail", args=[self.code])
 
+    @property
+    def nr_books(self):
+        return self.books.all().count()
+    
     class Meta:
         verbose_name_plural = "Countries"
 
@@ -58,13 +62,19 @@ class Author(models.Model):
     )
 
     slug = models.SlugField(default="", blank=True, null=False, db_index=True)
-
+    
+    @property
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
 
-    # returns the number of books written by the author
+    @property
     def books_written(self):
         return self.books.all().count()
+    
+    @property
+    def book_list(self):
+        # return a string with all the books written by the author
+        return ", ".join([book.title for book in self.books.all()])
 
     def get_absolute_url(self):
         return reverse("author_detail", args=[self.slug])

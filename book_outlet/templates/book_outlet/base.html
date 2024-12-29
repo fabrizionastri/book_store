@@ -16,6 +16,13 @@
         <link rel="stylesheet" href="{% static 'app.css' %}">
     </head>
     <body>
+        {% comment %} include a nav bar with links to the books and countries urls {% endcomment %}
+        <nav>
+            <a href="{% url 'index' %}">Index</a>
+            <a href="{% url 'books' %}">Books</a>
+            <a href="{% url 'countries' %}">Countries</a>
+            <a href="{% url 'authors' %}">Authors</a>
+        </nav>
         {% block content %}
         {% endblock content %}
     </body>
