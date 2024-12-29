@@ -1,13 +1,9 @@
 [project]
 name = "book-store"
 version = "0.1.0"
-description = "Add your description here"
-authors = [
-    { name = "Fabrizio", email = "fabrizio.nastri@flexup.org" }
-]
-dependencies = [
-    "django>=5.1.4",
-]
+description = "Book store with generic components"
+authors = [{ name = "Fabrizio", email = "fabrizio.nastri@flexup.org" }]
+dependencies = ["django>=5.1.4"]
 readme = "README.md"
 requires-python = ">= 3.12"
 
